@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+client/node_modules/
+server/node_modules/
+
+# Build output
+dist/
+client/dist/
+
+# Environment / secrets — NEVER commit these
+.env
+.env.jira
+server/.env
+client/.env
+
+# Local overrides
+*.local
+
+# Playwright
+playwright-report/
+test-results/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Claude Code internal files
+.claude/

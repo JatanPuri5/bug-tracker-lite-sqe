@@ -1,0 +1,39 @@
+version: '3.9'
+
+services:
+  mongo:
+    image: mongo:7
+    container_name: bug-tracker-mongo
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo-data:/data/db
+    restart: unless-stopped
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: bug-tracker-server
+    ports:
+      - '5000:5000'
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/bug-tracker
+      - PORT=5000
+    depends_on:
+      - mongo
+    restart: unless-stopped
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: bug-tracker-client
+    ports:
+      - '3000:80'
+    depends_on:
+      - server
+    restart: unless-stopped
+
+volumes:
+  mongo-data:

@@ -1,0 +1,20 @@
+{
+  "name": "bug-tracker-lite",
+  "version": "1.0.0",
+  "description": "Bug Tracker Lite App - SQE Project",
+  "scripts": {
+    "dev": "concurrently \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
+    "build": "npm run build --prefix client",
+    "test:e2e": "playwright test",
+    "test:report": "playwright show-report",
+    "jira:update": "node scripts/update-jira-results.js"
+  },
+  "dependencies": {
+    "axios": "^1.18.1",
+    "dotenv": "^16.6.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.44.0",
+    "concurrently": "^8.2.2"
+  }
+}
