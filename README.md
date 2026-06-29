@@ -50,7 +50,7 @@ MERN Application Development
         ↓
 Docker Compose (mongo + server + client)
         ↓
-Playwright E2E Automation (10 test cases)
+Playwright E2E Automation (5 test cases)
         ↓
 Jira Status Update (KAN-8 to KAN-12 → Done)
         ↓
@@ -96,12 +96,19 @@ JIRA_BASE_URL=https://your-site.atlassian.net
 JIRA_EMAIL=your@email.com
 JIRA_API_TOKEN=your_api_token
 JIRA_PROJECT_KEY=KAN
+
+# "true"  → normal app demo: creates Jira issues automatically on bug creation
+# "false" → Playwright testing: saves bugs only in MongoDB, no Jira issues created
+JIRA_SYNC_ENABLED=true
 ```
 
 Copy from the example:
 ```bash
 copy .env.jira.example .env.jira
 ```
+
+> **Playwright testing tip:** Set `JIRA_SYNC_ENABLED=false` in `.env.jira` before running
+> `docker compose up --build -d` to prevent automated tests from polluting the Jira board.
 
 ### `server/.env` (local dev only — never committed)
 
@@ -175,7 +182,7 @@ Ensure the app is running (Docker or local), then:
 # Install Playwright browsers (first time only)
 npx playwright install
 
-# Run all 10 test cases
+# Run all 5 test cases
 npm run test:e2e
 
 # View HTML report after tests
@@ -191,11 +198,6 @@ npm run test:report
 | KAN-10 | TC-03 | Update Bug Status |
 | KAN-11 | TC-04 | Filter Bugs by Severity and Status |
 | KAN-12 | TC-05 | Delete Bug Successfully |
-| KAN-13 | TC-06 | Page Loads with Title and Empty State |
-| KAN-14 | TC-07 | Bug Count Updates as Bugs Are Added |
-| KAN-15 | TC-08 | Form Resets After Successful Submission |
-| KAN-16 | TC-09 | Bug Description Is Displayed on Card |
-| KAN-17 | TC-10 | Filter by Severity and Status Combined |
 
 ---
 
@@ -262,7 +264,7 @@ bug-tracker-lite-sqe/
 │   ├── services/jira.service.js
 │   └── Dockerfile
 ├── tests/
-│   └── bugs.spec.ts            # 10 Playwright test cases
+│   └── bugs.spec.ts            # 5 Playwright test cases (KAN-8 to KAN-12)
 ├── docs/
 │   ├── project-overview.md
 │   └── result-analysis-report.md

@@ -3,6 +3,8 @@ const router = express.Router();
 const Bug = require('../models/Bug');
 const { createJiraIssue, transitionJiraIssue, addJiraComment } = require('../services/jira.service');
 
+const jiraEnabled = () => process.env.JIRA_SYNC_ENABLED !== 'false';
+
 // GET /api/bugs — supports ?severity=&status= filters
 router.get('/', async (req, res) => {
   try {
@@ -26,15 +28,20 @@ router.post('/', async (req, res) => {
 
     const bug = await Bug.create({ title, description, severity });
 
-    try {
-      const { key, url } = await createJiraIssue(bug);
-      bug.jiraKey = key;
-      bug.jiraUrl = url;
-      bug.jiraSyncStatus = 'SYNCED';
-      await bug.save();
-    } catch (jiraErr) {
-      console.error('Jira issue creation failed:', jiraErr.message);
-      bug.jiraSyncStatus = 'FAILED';
+    if (jiraEnabled()) {
+      try {
+        const { key, url } = await createJiraIssue(bug);
+        bug.jiraKey = key;
+        bug.jiraUrl = url;
+        bug.jiraSyncStatus = 'SYNCED';
+        await bug.save();
+      } catch (jiraErr) {
+        console.error('Jira issue creation failed:', jiraErr.message);
+        bug.jiraSyncStatus = 'FAILED';
+        await bug.save();
+      }
+    } else {
+      bug.jiraSyncStatus = 'DISABLED';
       await bug.save();
     }
 
@@ -56,6 +63,7 @@ router.patch('/:id', async (req, res) => {
     });
 
     const becomingResolved =
+      jiraEnabled() &&
       req.body.status === 'Resolved' &&
       existing.status !== 'Resolved' &&
       bug.jiraKey;

@@ -32,7 +32,7 @@ const bugSchema = new mongoose.Schema(
     },
     jiraSyncStatus: {
       type: String,
-      enum: ['SYNCED', 'FAILED', null],
+      enum: ['SYNCED', 'FAILED', 'DISABLED', null],
       default: null,
     },
   },
