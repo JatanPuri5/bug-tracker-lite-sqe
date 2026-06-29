@@ -100,4 +100,63 @@ test.describe('Bug Tracker Lite — Jira Test Cases', () => {
     await expect(page.locator('[data-testid="bug-title"]')).toHaveCount(0);
     await expect(page.locator('[data-testid="empty-state"]')).toBeVisible();
   });
+
+  // KAN-13 | TC-06
+  test('KAN-13 | TC-06 | Page Loads with Title and Empty State', async ({ page }) => {
+    await expect(page.locator('[data-testid="app-title"]')).toContainText('Bug Tracker Lite');
+    await expect(page.locator('[data-testid="bug-form"]')).toBeVisible();
+    await expect(page.locator('[data-testid="bug-filters"]')).toBeVisible();
+    await expect(page.locator('[data-testid="empty-state"]')).toBeVisible();
+    await expect(page.locator('[data-testid="bug-count"]')).toContainText('0 bugs found');
+  });
+
+  // KAN-14 | TC-07
+  test('KAN-14 | TC-07 | Bug Count Updates as Bugs Are Added', async ({ page }) => {
+    await expect(page.locator('[data-testid="bug-count"]')).toContainText('0 bugs found');
+
+    await createBug(page, 'First bug');
+    await expect(page.locator('[data-testid="bug-count"]')).toContainText('1 bug found');
+
+    await createBug(page, 'Second bug');
+    await expect(page.locator('[data-testid="bug-count"]')).toContainText('2 bugs found');
+  });
+
+  // KAN-15 | TC-08
+  test('KAN-15 | TC-08 | Form Resets After Successful Submission', async ({ page }) => {
+    await page.fill('[data-testid="input-title"]', 'Reset test bug');
+    await page.fill('[data-testid="input-description"]', 'Some description');
+    await page.selectOption('[data-testid="select-severity"]', 'High');
+    await page.click('[data-testid="btn-create"]');
+
+    await expect(page.locator('[data-testid="bug-title"]').first()).toContainText('Reset test bug');
+    await expect(page.locator('[data-testid="input-title"]')).toHaveValue('');
+    await expect(page.locator('[data-testid="input-description"]')).toHaveValue('');
+    await expect(page.locator('[data-testid="select-severity"]')).toHaveValue('Low');
+  });
+
+  // KAN-16 | TC-09
+  test('KAN-16 | TC-09 | Bug Description Is Displayed on Card', async ({ page }) => {
+    await createBug(page, 'Desc test bug', 'This is a detailed description', 'Medium');
+
+    await expect(page.locator('[data-testid="bug-description"]').first()).toBeVisible();
+    await expect(page.locator('[data-testid="bug-description"]').first()).toContainText(
+      'This is a detailed description'
+    );
+  });
+
+  // KAN-17 | TC-10
+  test('KAN-17 | TC-10 | Filter by Severity and Status Combined', async ({ page }) => {
+    await createBug(page, 'High Open bug', '', 'High');
+    await createBug(page, 'High Resolved bug', '', 'High');
+
+    await page.locator('[data-testid="select-status"]').nth(1).selectOption('Resolved');
+    await expect(page.locator('[data-testid="bug-status-badge"]').nth(1)).toContainText('Resolved');
+
+    await page.selectOption('[data-testid="filter-severity"]', 'High');
+    await page.selectOption('[data-testid="filter-status"]', 'Resolved');
+
+    await expect(page.locator('[data-testid="bug-card"]')).toHaveCount(1);
+    await expect(page.locator('[data-testid="bug-severity"]').first()).toContainText('High');
+    await expect(page.locator('[data-testid="bug-status-badge"]').first()).toContainText('Resolved');
+  });
 });

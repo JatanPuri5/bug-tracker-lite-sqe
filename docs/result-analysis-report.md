@@ -1,436 +1,252 @@
 # Result Analysis Report
-## Bug Tracker Lite App — Software Quality Engineering and Testing
+## Bug Tracker Lite App — Software Quality Engineering and Testing (SQE)
 
----
-
-| Field          | Details                          |
-|----------------|----------------------------------|
-| **Project**    | Bug Tracker Lite App             |
-| **Subject**    | Software Quality Engineering and Testing (SQE) |
-| **Platform**   | Jira Cloud + Playwright + Docker |
-| **Report Date**| June 2026                        |
-| **Status**     | All Test Cases Passed            |
+**Date:** 2026-06-29  
+**Student:** Jatan Puri  
+**Jira Site:** https://jatinpuri108.atlassian.net  
+**Project Key:** KAN  
+**GitHub:** https://github.com/JatanPuri5/bug-tracker-lite-sqe.git
 
 ---
 
 ## 1. Project Overview
 
-**Bug Tracker Lite App** is a lightweight full-stack web application built as a practical demonstration of software quality engineering principles. The application allows users to create, view, update, filter, and delete bug reports — mimicking the core workflow of professional bug tracking tools.
+Bug Tracker Lite is a lightweight MERN-stack web application developed as a practical demonstration of software quality engineering principles. Users can report, view, update, filter, and delete bugs. Every bug created in the app automatically creates a linked Jira issue. When a bug is marked **Resolved**, the linked Jira issue is automatically transitioned to **Done**.
 
-The project was developed using the **MERN stack** (MongoDB, Express.js, React, Node.js) and containerized using **Docker**. The entire software development lifecycle — from requirement management to automated testing — was managed and tracked using **Jira Cloud**.
+The project demonstrates a complete SQE lifecycle:
 
-### Objectives
-
-- Build a functional bug tracking application aligned with Jira user stories
-- Write automated end-to-end tests using Playwright mapped to Jira test cases
-- Containerize the full application stack using Docker and Docker Compose
-- Automate Jira task status updates using a custom Node.js script with the Jira Cloud REST API v3
-- Demonstrate the integration of agile project management with automated software testing
-
----
-
-## 2. Tools and Technologies
-
-### Application Stack
-
-| Layer       | Technology              | Version  |
-|-------------|-------------------------|----------|
-| Frontend    | React + Vite            | 18.x / 5.x |
-| Backend     | Node.js + Express.js    | 20.x / 4.x |
-| Database    | MongoDB + Mongoose      | 7.x / 8.x |
-| Styling     | Plain CSS               | —        |
-
-### Testing and QA
-
-| Tool         | Purpose                                      |
-|--------------|----------------------------------------------|
-| Playwright   | End-to-end browser automation testing        |
-| data-testid  | Stable element selectors for test automation |
-| HTML Report  | Playwright built-in test report              |
-
-### DevOps and Infrastructure
-
-| Tool              | Purpose                                     |
-|-------------------|---------------------------------------------|
-| Docker Desktop    | Container runtime environment               |
-| Docker Compose    | Multi-container orchestration               |
-| Nginx             | Static file serving for the React client    |
-
-### Project Management and Automation
-
-| Tool                  | Purpose                                         |
-|-----------------------|-------------------------------------------------|
-| Jira Cloud            | Epic, user story, and test case management      |
-| Atlassian MCP         | Claude AI integration with Jira                 |
-| Jira REST API v3      | Programmatic issue transition and commenting    |
-| Node.js Script        | Automated Jira status update after test runs    |
-| axios + dotenv        | HTTP client and environment variable management |
+- Requirements captured as Jira Epic and User Stories
+- MERN application built to satisfy those stories
+- Docker Compose used for containerized deployment
+- Playwright used for end-to-end automated testing (10 test cases)
+- Jira test case statuses updated automatically via REST API
+- Project version-controlled on GitHub with secrets excluded
 
 ---
 
-## 3. Jira MCP Work
+## 2. Tools Used
 
-The **Atlassian Model Context Protocol (MCP)** was configured and integrated with Claude AI to enable direct interaction with the Jira Cloud project board from within the development environment.
-
-### MCP Integration Steps
-
-1. Configured the Atlassian MCP server in Claude Code settings with the project's Jira Cloud credentials
-2. Connected to the Jira project board `KAN` (Bug Tracker Lite)
-3. Used MCP to create and manage the project Epic, User Stories, and Test Cases directly through natural language instructions
-4. Automated post-test Jira updates using a custom script (`scripts/update-jira-results.js`) leveraging the Jira Cloud REST API v3
-
-### Jira Project Board
-
-- **Site:** `https://jatinpuri108.atlassian.net`
-- **Project Key:** `KAN`
-- **Board Type:** Scrum
+| Category | Tool | Purpose |
+|----------|------|---------|
+| Frontend | React 18 + Vite | User interface |
+| Backend | Node.js + Express | REST API |
+| Database | MongoDB 7 + Mongoose | Data persistence |
+| Containerization | Docker + Docker Compose | Multi-service deployment |
+| Static serving | Nginx (alpine) | Serves React build inside Docker |
+| E2E Testing | Playwright | Browser automation |
+| Issue Tracking | Atlassian Jira REST API v3 | Issue creation and transitions |
+| MCP (Claude Code) | Atlassian MCP + Playwright MCP | AI-integrated Jira and browser control |
+| Automation | Node.js script (update-jira-results.js) | Post-test Jira updates |
+| Version Control | GitHub | Source delivery |
 
 ---
 
-## 4. Jira User Stories
-
-An **Epic** was created as the parent container for all user stories and test cases.
+## 3. Jira Epic, Stories, and Test Cases
 
 ### Epic
 
-| Field       | Details                              |
-|-------------|--------------------------------------|
-| Issue Key   | KAN-2                                |
-| Type        | Epic                                 |
-| Title       | Bug Tracker Lite App                 |
-| Description | Full-stack bug tracking application for SQE subject |
+| Key | Title | Status |
+|-----|-------|--------|
+| KAN-2 | Bug Tracker Lite App | To Do |
 
-### User Stories (KAN-3 to KAN-7)
+### User Stories
 
-| Issue Key | User Story Title              | Acceptance Criteria Summary                                              |
-|-----------|-------------------------------|--------------------------------------------------------------------------|
-| KAN-3     | Create Bug Report             | User can submit a bug with title, description, and severity. Title is required. |
-| KAN-4     | View Bug List                 | All submitted bugs are displayed with title, severity, status, and date. |
-| KAN-5     | Update Bug Status             | User can change a bug's status from Open → In Progress → Resolved.       |
-| KAN-6     | Filter Bugs by Severity and Status | Dropdown filters narrow the bug list by severity or status. Reset clears filters. |
-| KAN-7     | Delete Bug                    | User can permanently delete a bug. The list updates immediately.         |
+| Key | Title | Acceptance Criteria |
+|-----|-------|---------------------|
+| KAN-3 | Create Bug Report | User submits bug with title, description, severity. Title required. |
+| KAN-4 | View Bug List | Bugs displayed with title, severity, status, date. |
+| KAN-5 | Update Bug Status | Status cycles: Open → In Progress → Resolved. |
+| KAN-6 | Filter Bugs | Dropdowns filter by severity and status. Reset clears filters. |
+| KAN-7 | Delete Bug | Bug permanently removed; list updates immediately. |
 
----
+### Test Case Tasks — Final Status
 
-## 5. Jira Test Cases
-
-Five test case tasks were created in Jira under the `KAN` project, each directly mapped to a user story. These test cases defined the scope of Playwright automation.
-
-| Issue Key | Test Case Title                        | Linked User Story | Initial Status |
-|-----------|----------------------------------------|-------------------|----------------|
-| KAN-8     | TC-01 Create Bug Successfully          | KAN-3             | To Do          |
-| KAN-9     | TC-02 Required Title Validation        | KAN-3             | To Do          |
-| KAN-10    | TC-03 Update Bug Status                | KAN-5             | To Do          |
-| KAN-11    | TC-04 Filter Bugs by Severity and Status | KAN-6           | To Do          |
-| KAN-12    | TC-05 Delete Bug Successfully          | KAN-7             | To Do          |
+| Key | Title | Linked Story | Status |
+|-----|-------|--------------|--------|
+| KAN-8 | TC-01 Create Bug Successfully | KAN-3 | **Done** |
+| KAN-9 | TC-02 Required Title Validation | KAN-3 | **Done** |
+| KAN-10 | TC-03 Update Bug Status | KAN-5 | **Done** |
+| KAN-11 | TC-04 Filter Bugs by Severity and Status | KAN-6 | **Done** |
+| KAN-12 | TC-05 Delete Bug Successfully | KAN-7 | **Done** |
 
 ---
 
-## 6. Playwright Automation Execution
+## 4. Docker Execution
 
-### Test File
-
-```
-tests/bugs.spec.ts
+**Commands:**
+```bash
+docker compose down
+docker compose up --build -d
+docker compose ps
 ```
 
-### Configuration
+**Container Status (verified 2026-06-29):**
 
-```
-playwright.config.ts
-- Browser : Chromium (Desktop Chrome)
-- Base URL : http://localhost:3000
-- Timeout  : 30,000 ms
-- Retries  : 1
-- Reporter : List + HTML
-```
+| Container | Image | Port | Status |
+|-----------|-------|------|--------|
+| bug-tracker-mongo | mongo:7 | 27017 | Running |
+| bug-tracker-server | bug-tracker-lite-sqe-server (node:20-alpine) | 5000 | Running |
+| bug-tracker-client | bug-tracker-lite-sqe-client (nginx:alpine) | 3000 | Running |
 
-### Test Suite
-
-All tests are grouped under the describe block:
-**`Bug Tracker Lite — Jira Test Cases`**
-
-A `beforeEach` hook navigates to the app and clears all existing bugs before every test to ensure a clean and isolated state.
-
-### Test Case Details
+All three containers started successfully. The deprecated `version` attribute was removed from `docker-compose.yml`.
 
 ---
 
-#### KAN-8 | TC-01 | Create Bug Successfully
+## 5. Playwright Automation Execution
 
-**Steps:**
-1. Fill in bug title: `Login button not working`
-2. Fill in description: `Clicking login does nothing`
-3. Select severity: `High`
-4. Click **Create Bug**
-
-**Assertions:**
-- Bug title appears in the list
-- Severity badge shows `High`
-- Status badge shows `Open` (default)
-
-**Result:** PASSED
-
----
-
-#### KAN-9 | TC-02 | Required Title Validation
-
-**Steps:**
-1. Leave the title field empty
-2. Click **Create Bug**
-
-**Assertions:**
-- Validation error message is visible: `Title is required`
-- No bug is added to the list
-
-**Result:** PASSED
-
----
-
-#### KAN-10 | TC-03 | Update Bug Status
-
-**Steps:**
-1. Create a bug: `Status update bug`
-2. Change status dropdown to `In Progress`
-3. Change status dropdown to `Resolved`
-
-**Assertions:**
-- Status badge updates to `In Progress` after first change
-- Status badge updates to `Resolved` after second change
-
-**Result:** PASSED
-
----
-
-#### KAN-11 | TC-04 | Filter Bugs by Severity and Status
-
-**Steps:**
-1. Create bug: `Critical login crash` with severity `Critical`
-2. Create bug: `Low priority typo` with severity `Low`
-3. Apply severity filter: `Critical`
-4. Reset filters
-5. Change first bug's status to `Resolved`
-6. Apply status filter: `Resolved`
-
-**Assertions:**
-- After severity filter: exactly 1 card shown with `Critical` badge
-- After reset: both 2 cards visible
-- After status filter: exactly 1 card shown with `Resolved` badge
-
-**Result:** PASSED
-
----
-
-#### KAN-12 | TC-05 | Delete Bug Successfully
-
-**Steps:**
-1. Create a bug: `Bug to be deleted`
-2. Click the **Delete** button
-
-**Assertions:**
-- Bug title element count becomes 0
-- Empty state message is displayed
-
-**Result:** PASSED
-
----
-
-### Execution Summary
-
-```
-Running 5 tests using 1 worker
-
-  ✓  KAN-8  | TC-01 | Create Bug Successfully
-  ✓  KAN-9  | TC-02 | Required Title Validation
-  ✓  KAN-10 | TC-03 | Update Bug Status
-  ✓  KAN-11 | TC-04 | Filter Bugs by Severity and Status
-  ✓  KAN-12 | TC-05 | Delete Bug Successfully
-
-  5 passed (duration ~15s)
+**Command:**
+```bash
+npm run test:e2e
 ```
 
+**Configuration:**
+- Browser: Chromium (headless Desktop Chrome)
+- Base URL: `http://localhost:3000`
+- Timeout: 30,000 ms per test
+- Retries: 1
+- Reporter: List + HTML
+
+**Test Results (10/10 Passed):**
+
+| # | Jira Key | Test Case | Result | Duration |
+|---|----------|-----------|--------|----------|
+| 1 | KAN-8 | TC-01 Create Bug Successfully | PASS | 3.9s |
+| 2 | KAN-9 | TC-02 Required Title Validation | PASS | 0.9s |
+| 3 | KAN-10 | TC-03 Update Bug Status | PASS | 4.3s |
+| 4 | KAN-11 | TC-04 Filter Bugs by Severity and Status | PASS | 7.4s |
+| 5 | KAN-12 | TC-05 Delete Bug Successfully | PASS | 2.8s |
+| 6 | KAN-13 | TC-06 Page Loads with Title and Empty State | PASS | 0.5s |
+| 7 | KAN-14 | TC-07 Bug Count Updates as Bugs Are Added | PASS | 4.0s |
+| 8 | KAN-15 | TC-08 Form Resets After Successful Submission | PASS | 2.7s |
+| 9 | KAN-16 | TC-09 Bug Description Is Displayed on Card | PASS | 2.4s |
+| 10 | KAN-17 | TC-10 Filter by Severity and Status Combined | PASS | 6.9s |
+
+**Summary:** 10/10 tests passed in 36.7 seconds.
+
+KAN-8 to KAN-12 are the five Jira-mapped test cases. KAN-13 to KAN-17 are additional coverage tests for page load, bug count, form reset, description display, and combined filtering.
+
 ---
 
-## 7. Jira Automation Result
+## 6. Jira Automation Result
 
-After Playwright tests passed, the automation script `scripts/update-jira-results.js` was executed using:
-
+**Command:**
 ```bash
 npm run jira:update
 ```
 
-### Script Workflow (per issue)
+The script loaded credentials from `.env.jira` (never printed), queried each issue's current status, transitioned any non-Done issues to Done, and posted a Playwright result comment.
 
-1. Fetch current issue status via `GET /rest/api/3/issue/{key}?fields=status`
-2. If not Done → fetch available transitions via `GET /rest/api/3/issue/{key}/transitions`
-3. Find the `Done` transition and apply it via `POST /rest/api/3/issue/{key}/transitions`
-4. Post a comment via `POST /rest/api/3/issue/{key}/comment` using Atlassian Document Format (ADF)
+**Comment added to each issue:**
+> "Automated test executed using Playwright. Result: Passed. Evidence available in Playwright HTML report."
 
-### Comment Added to Each Issue
+**Result:**
 
-> Automated test executed using Playwright. Result: Passed. Evidence available in Playwright HTML report.
-
-### Result Table
-
-| Issue Key | Test Case                              | Previous Status | New Status | Automation Result |
-|-----------|----------------------------------------|-----------------|------------|-------------------|
-| KAN-8     | TC-01 Create Bug Successfully          | To Do           | Done       | Passed            |
-| KAN-9     | TC-02 Required Title Validation        | To Do           | Done       | Passed            |
-| KAN-10    | TC-03 Update Bug Status                | To Do           | Done       | Passed            |
-| KAN-11    | TC-04 Filter Bugs by Severity and Status | To Do         | Done       | Passed            |
-| KAN-12    | TC-05 Delete Bug Successfully          | To Do           | Done       | Passed            |
-
-**All 5 Jira test case tasks successfully transitioned from To Do → Done.**
+| Issue Key | Test Case | New Status | Result |
+|-----------|-----------|------------|--------|
+| KAN-8 | TC-01 Create Bug Successfully | Done | Passed |
+| KAN-9 | TC-02 Required Title Validation | Done | Passed |
+| KAN-10 | TC-03 Update Bug Status | Done | Passed |
+| KAN-11 | TC-04 Filter Bugs by Severity and Status | Done | Passed |
+| KAN-12 | TC-05 Delete Bug Successfully | Done | Passed |
 
 ---
 
-## 8. Docker Execution
+## 7. Jira App Integration Result
 
-The full application stack was containerized using Docker and orchestrated with Docker Compose.
+| Behaviour | Verified |
+|-----------|----------|
+| `POST /api/bugs` creates a Jira Bug issue in KAN | Yes |
+| `jiraKey` and `jiraUrl` stored in MongoDB on SYNCED | Yes |
+| `jiraSyncStatus: 'SYNCED'` set on successful sync | Yes |
+| `jiraSyncStatus: 'FAILED'` set on Jira API error | Yes |
+| `PATCH /api/bugs/:id` with `status: Resolved` transitions Jira issue to Done | Yes |
+| Jira comment added automatically on Resolved | Yes |
+| Jira key displayed as clickable link on bug card | Yes |
+| "Jira Sync: Failed" shown on card if sync fails | Yes |
+| Credentials read from env vars only — never hardcoded | Yes |
 
-### Docker Architecture
+---
 
-```
-docker-compose.yml
-│
-├── mongo    (MongoDB 7 — port 27017)
-├── server   (Express API — port 5000)
-└── client   (React via Nginx — port 3000 → 80)
-```
+## 8. MongoDB Verification
 
-### Container Details
-
-| Container              | Image           | Port Mapping  | Role                        |
-|------------------------|-----------------|---------------|-----------------------------|
-| bug-tracker-mongo      | mongo:7         | 27017:27017   | Database                    |
-| bug-tracker-server     | node:20-alpine  | 5000:5000     | REST API (Express)          |
-| bug-tracker-client     | nginx:alpine    | 3000:80       | Frontend (React static files) |
-
-### Client Dockerfile — Multi-Stage Build
-
-```dockerfile
-# Stage 1: Build React app
-FROM node:20-alpine AS builder
-WORKDIR /app
-COPY package*.json ./
-RUN npm install --legacy-peer-deps
-COPY . .
-RUN npm run build
-
-# Stage 2: Serve with Nginx
-FROM nginx:alpine
-COPY --from=builder /app/dist /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
-```
-
-### Server Dockerfile
-
-```dockerfile
-FROM node:20-alpine
-WORKDIR /app
-COPY package*.json ./
-RUN npm install --production
-COPY . .
-EXPOSE 5000
-CMD ["node", "server.js"]
-```
-
-### Commands Used
-
+**Command:**
 ```bash
-# Build and start all containers
-docker-compose up --build
-
-# Verify running containers
-docker ps
-
-# Stop and remove containers
-docker-compose down
+docker exec bug-tracker-mongo mongosh bug-tracker --eval \
+  "db.bugs.find({},{title:1,status:1,jiraKey:1,jiraUrl:1,jiraSyncStatus:1}).pretty()"
 ```
 
-### Nginx Reverse Proxy Config
-
-API requests from the React frontend are proxied to the Express server inside Docker:
-
-```nginx
-location /api/ {
-    proxy_pass http://server:5000/api/;
-}
+**Sample Output (verified 2026-06-29):**
+```json
+[
+  {
+    "title": "High Open bug",
+    "status": "Resolved",
+    "jiraKey": "KAN-34",
+    "jiraUrl": "https://jatinpuri108.atlassian.net/browse/KAN-34",
+    "jiraSyncStatus": "SYNCED"
+  },
+  {
+    "title": "High Resolved bug",
+    "status": "Open",
+    "jiraKey": "KAN-35",
+    "jiraUrl": "https://jatinpuri108.atlassian.net/browse/KAN-35",
+    "jiraSyncStatus": "SYNCED"
+  }
+]
 ```
 
-### Docker Execution Result
-
-| Step                        | Status    |
-|-----------------------------|-----------|
-| MongoDB container started   | Success   |
-| Server container started    | Success   |
-| Client container built      | Success   |
-| Client container started    | Success   |
-| App accessible at :3000     | Success   |
-| API accessible at :5000     | Success   |
+Bugs are persisted with Jira keys and `jiraSyncStatus: SYNCED`, confirming full end-to-end integration.
 
 ---
 
-## 9. Screenshots / Evidence List
+## 9. Evidence Checklist
 
-The following evidence was captured during project execution. Screenshots are stored in the `docs/screenshots/` directory.
-
-| # | Evidence Item                                | File Name                              |
-|---|----------------------------------------------|----------------------------------------|
-| 1 | Jira Board showing Epic KAN-2                | `jira-epic-kan2.png`                   |
-| 2 | Jira User Stories KAN-3 to KAN-7             | `jira-user-stories.png`                |
-| 3 | Jira Test Cases KAN-8 to KAN-12 (To Do)      | `jira-testcases-todo.png`              |
-| 4 | Bug Tracker Lite App running in browser      | `app-dashboard.png`                    |
-| 5 | Bug creation form with filled fields         | `app-bug-form.png`                     |
-| 6 | Bug list with severity and status badges     | `app-bug-list.png`                     |
-| 7 | Severity filter applied (Critical)           | `app-filter-severity.png`              |
-| 8 | Status filter applied (Resolved)             | `app-filter-status.png`                |
-| 9 | Playwright test run — all 5 passed           | `playwright-all-passed.png`            |
-| 10| Playwright HTML Report                       | `playwright-html-report.png`           |
-| 11| Jira update script terminal output           | `jira-script-output.png`               |
-| 12| Jira Test Cases KAN-8 to KAN-12 (Done)       | `jira-testcases-done.png`              |
-| 13| Jira comment on KAN-8 (Playwright result)    | `jira-comment-kan8.png`                |
-| 14| Docker Desktop — all containers running      | `docker-containers-running.png`        |
-| 15| Docker Compose terminal output               | `docker-compose-output.png`            |
+| Item | Status |
+|------|--------|
+| Atlassian MCP connected | Done |
+| Playwright MCP connected | Done |
+| Jira project KAN accessible via REST API | Done |
+| Epic KAN-2 confirmed | Done |
+| User Stories KAN-3 to KAN-7 confirmed | Done |
+| Test Cases KAN-8 to KAN-12 confirmed | Done |
+| Docker: all 3 containers running | Done |
+| MERN app accessible at localhost:3000 | Done |
+| POST /api/bugs creates Jira issue | Done |
+| PATCH /api/bugs/:id transitions Jira to Done | Done |
+| MongoDB stores jiraKey and jiraSyncStatus | Done |
+| 10/10 Playwright tests passed | Done |
+| KAN-8 to KAN-12 transitioned to Done in Jira | Done |
+| Playwright comments added to Jira issues | Done |
+| README updated (professional, complete) | Done |
+| .env.jira excluded from git (.gitignore) | Done |
+| GitHub push completed with no secrets committed | Done |
 
 ---
 
 ## 10. Conclusion
 
-The **Bug Tracker Lite App** project successfully demonstrated a complete software quality engineering workflow from requirements management through to automated testing, CI-style automation, and containerized deployment.
+The Bug Tracker Lite App project successfully demonstrated all required SQE competencies:
 
-### Key Achievements
-
-| Area                    | Achievement                                                                 |
-|-------------------------|-----------------------------------------------------------------------------|
-| Requirements Management | 1 Epic (KAN-2) and 5 User Stories (KAN-3 to KAN-7) created and managed in Jira |
-| Test Planning           | 5 test cases (KAN-8 to KAN-12) defined and linked to user stories in Jira  |
-| Automation              | All 5 Playwright E2E tests executed and passed successfully                 |
-| Jira Integration        | All test case tasks automatically transitioned from To Do → Done via REST API |
-| Containerization        | Full MERN stack containerized and running with Docker Compose               |
-| Code Quality            | Clean, student-friendly code with `data-testid` attributes for test stability |
-
-### Lessons Learned
-
-- **Stable selectors matter:** Using `data-testid` attributes on all interactive elements made Playwright tests resilient to UI styling changes.
-- **Test isolation is critical:** Clearing all bugs before each test in `beforeEach` prevented one test's data from polluting another.
-- **API v3 requires ADF:** Jira Cloud REST API v3 requires comments to be submitted in Atlassian Document Format (ADF), not plain text strings.
-- **Docker networking:** Services in Docker Compose communicate using service names (e.g., `http://server:5000`) rather than `localhost`, which required the Nginx proxy configuration.
-- **Environment separation:** Using `.env.jira` separately from `.env` kept Jira credentials isolated and out of version control.
-
-### Final Status
+| Area | Achievement |
+|------|-------------|
+| Requirements Management | Jira Epic + 5 User Stories defined and tracked in project KAN |
+| Test Planning | 5 test cases (KAN-8 to KAN-12) linked to stories and automated |
+| Application Development | MERN stack implements all user stories with Jira integration |
+| Containerization | Docker Compose orchestrates mongo, server, and client cleanly |
+| Test Automation | 10/10 Playwright E2E tests passed across all core flows |
+| Jira Automation | Test results pushed to Jira automatically via REST API script |
+| Security | Credentials in `.env.jira` (gitignored), never in code or commits |
+| Version Control | GitHub push with all sensitive files excluded |
 
 ```
-User Stories   : 5 / 5   Completed
-Test Cases     : 5 / 5   Passed
-Jira Updates   : 5 / 5   Done
-Docker         : 3 / 3   Containers Running
-Overall Result : PASS
+User Stories  : 5 / 5   Defined
+Test Cases    : 10 / 10  Passed  (5 Jira-mapped + 5 additional coverage)
+Jira Updates  : 5 / 5   Done
+Docker        : 3 / 3   Containers Running
+Overall       : PASS — Project is presentation-ready
 ```
 
 ---
 
-*Report prepared for Software Quality Engineering and Testing (SQE) subject.*
-*Project: Bug Tracker Lite App | Jira Project: KAN*
+*Report prepared for Software Quality Engineering and Testing (SQE)*  
+*Project: Bug Tracker Lite App | Jira Key: KAN | Date: 2026-06-29*

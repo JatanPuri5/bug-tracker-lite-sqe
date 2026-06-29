@@ -33,6 +33,19 @@ function BugCard({ bug, onStatusChange, onDelete }) {
           </span>
           <span className="bug-date">{formatDate(bug.createdAt)}</span>
         </div>
+        {bug.jiraKey && bug.jiraUrl && (
+          <p className="bug-jira" data-testid="bug-jira-key">
+            Jira:{' '}
+            <a href={bug.jiraUrl} target="_blank" rel="noopener noreferrer">
+              {bug.jiraKey}
+            </a>
+          </p>
+        )}
+        {!bug.jiraKey && bug.jiraSyncStatus === 'FAILED' && (
+          <p className="bug-jira bug-jira-failed" data-testid="bug-jira-failed">
+            Jira Sync: Failed
+          </p>
+        )}
       </div>
 
       <div className="bug-actions">

@@ -22,6 +22,19 @@ const bugSchema = new mongoose.Schema(
       enum: ['Open', 'In Progress', 'Resolved'],
       default: 'Open',
     },
+    jiraKey: {
+      type: String,
+      default: null,
+    },
+    jiraUrl: {
+      type: String,
+      default: null,
+    },
+    jiraSyncStatus: {
+      type: String,
+      enum: ['SYNCED', 'FAILED', null],
+      default: null,
+    },
   },
   { timestamps: true }
 );

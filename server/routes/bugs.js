@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Bug = require('../models/Bug');
+const { createJiraIssue, transitionJiraIssue, addJiraComment } = require('../services/jira.service');
 
 // GET /api/bugs — supports ?severity=&status= filters
 router.get('/', async (req, res) => {
@@ -22,7 +23,21 @@ router.post('/', async (req, res) => {
     if (!title || !title.trim()) {
       return res.status(400).json({ message: 'Title is required' });
     }
+
     const bug = await Bug.create({ title, description, severity });
+
+    try {
+      const { key, url } = await createJiraIssue(bug);
+      bug.jiraKey = key;
+      bug.jiraUrl = url;
+      bug.jiraSyncStatus = 'SYNCED';
+      await bug.save();
+    } catch (jiraErr) {
+      console.error('Jira issue creation failed:', jiraErr.message);
+      bug.jiraSyncStatus = 'FAILED';
+      await bug.save();
+    }
+
     res.status(201).json(bug);
   } catch (err) {
     res.status(400).json({ message: err.message });
@@ -32,11 +47,31 @@ router.post('/', async (req, res) => {
 // PATCH /api/bugs/:id
 router.patch('/:id', async (req, res) => {
   try {
+    const existing = await Bug.findById(req.params.id);
+    if (!existing) return res.status(404).json({ message: 'Bug not found' });
+
     const bug = await Bug.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,
     });
-    if (!bug) return res.status(404).json({ message: 'Bug not found' });
+
+    const becomingResolved =
+      req.body.status === 'Resolved' &&
+      existing.status !== 'Resolved' &&
+      bug.jiraKey;
+
+    if (becomingResolved) {
+      try {
+        await transitionJiraIssue(bug.jiraKey, 'Done');
+        await addJiraComment(
+          bug.jiraKey,
+          'Bug marked as Resolved from Bug Tracker Lite App.'
+        );
+      } catch (jiraErr) {
+        console.error('Jira transition failed:', jiraErr.message);
+      }
+    }
+
     res.json(bug);
   } catch (err) {
     res.status(400).json({ message: err.message });
